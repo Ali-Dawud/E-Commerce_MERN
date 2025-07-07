@@ -1,4 +1,5 @@
-import { cartModel,ICartItem } from "../models/cartModel";
+import { cartModel, ICartItem } from "../models/cartModel";
+import { IOrderItem, orderModel } from "../models/orderModel";
 import productModel from "../models/productModel";
 
 interface CreateCartForUser {
@@ -29,9 +30,7 @@ interface ClearInCart {
   userId: string;
 }
 
-export const clearCart = async ({
-  userId,
-}: ClearInCart) => {
+export const clearCart = async ({ userId }: ClearInCart) => {
   const cart = await getActiveCartForUser({ userId });
 
   cart.items = [];
@@ -40,7 +39,6 @@ export const clearCart = async ({
   const updateCart = await cart.save();
   return { data: updateCart, statusCode: 200 };
 };
-
 
 interface AddItemToCart {
   productId: any;
@@ -113,7 +111,7 @@ export const updateItemInCart = async ({
     return p.product.toString() !== productId;
   });
 
-  let total = calculateCartTolaItems({cartItem: otherCartItems})
+  let total = calculateCartTolaItems({ cartItem: otherCartItems });
 
   existsInCart.quantity = quantity;
   total += existsInCart.quantity * existsInCart.unitPrice;
@@ -137,7 +135,7 @@ export const deleteItemInCart = async ({
   const existsInCart = cart.items.find(
     (p) => p.product.toString() === productId
   );
-    console.log(productId)
+  console.log(productId);
 
   if (!existsInCart) {
     return { data: "Item dose not exists in cart!", statusCode: 400 };
@@ -147,7 +145,7 @@ export const deleteItemInCart = async ({
     return p.product.toString() !== productId;
   });
 
-  const total =calculateCartTolaItems({cartItem: otherCartItems})
+  const total = calculateCartTolaItems({ cartItem: otherCartItems });
 
   cart.items = otherCartItems;
   cart.totalAmount = total;
@@ -156,10 +154,55 @@ export const deleteItemInCart = async ({
   return { data: updateCart, statusCode: 201 };
 };
 
-const calculateCartTolaItems = (({cartItem}:{ cartItem: ICartItem[] })=>{
+const calculateCartTolaItems = ({ cartItem }: { cartItem: ICartItem[] }) => {
   const total = cartItem.reduce((sum, product) => {
     sum += product.quantity * product.unitPrice;
     return sum;
   }, 0);
-  return total
-})
+  return total;
+};
+
+interface Checkout {
+  userId: string;
+  address: string;
+}
+
+export const checkout = async ({ userId, address }: Checkout) => {
+  
+  if (!address) {
+    return { data: "Please add the address", statusCode: 400 };
+  }
+  const cart = await getActiveCartForUser({ userId });
+
+  const orderItems: IOrderItem[] = [];
+  //loop
+  for (const item of cart.items) {
+    const product = await productModel.findById(item.product);
+    if (!product) {
+      return { data: "Product not found!", statusCode: 400 };
+    }
+
+    const orderItem: IOrderItem = {
+      productTitle: product.title,
+      productImage: product.image,
+      unitPrice: item.unitPrice,
+      quantity: item.quantity,
+    };
+    
+    orderItems.push(orderItem);
+  }
+
+  const order = await orderModel.create({
+    orderItems,
+    total: cart.totalAmount,
+    address,
+    userId,
+  });
+
+  await order.save();
+
+  cart.status = "completed";
+  await cart.save();
+
+  return { data: order, statusCode: 200 };
+};
