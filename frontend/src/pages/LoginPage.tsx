@@ -5,36 +5,31 @@ import { useRef, useState } from "react";
 import { useAuth } from "../context/Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-function RegisterPage() {
+function LoginPage() {
   const [error, setError] = useState("");
-
-  const firstNameRef = useRef<HTMLInputElement>(null);
-  const lastNameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const { login } = useAuth();
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const onSumbit = async () => {
-    const firstName = firstNameRef.current?.value;
-    const lastName = lastNameRef.current?.value;
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
 
-    if (!firstName || !lastName || !email || !password) {
+    if (!email || !password) {
       setError("Check submitted data");
       return;
     }
 
-    const response = await fetch("http://localhost:3001/user/register", {
+    const response = await fetch("http://localhost:3001/user/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ firstName, lastName, email, password }),
+      body: JSON.stringify({ email, password }),
     });
 
     if (!response.ok) {
-      setError("Unble to register user, please try different credientials!");
+      setError("Unble to login user, please try different credientials!");
       return;
     }
 
@@ -44,8 +39,9 @@ function RegisterPage() {
       return;
     }
 
+
     login(email, token);
-    navigate("/");
+    navigate("/")
   };
   return (
     <Container>
@@ -57,7 +53,7 @@ function RegisterPage() {
         mt={4}
       >
         <Typography variant="h4" color="initial">
-          Register New Account
+          Login to Your Account
         </Typography>
         <Box
           sx={{
@@ -70,18 +66,6 @@ function RegisterPage() {
             p: 2,
           }}
         >
-          <TextField
-            inputRef={firstNameRef}
-            name="firstName"
-            label="Frist Name"
-            variant="outlined"
-          />
-          <TextField
-            inputRef={lastNameRef}
-            name="lastName"
-            label="Last Name"
-            variant="outlined"
-          />
           <TextField
             inputRef={emailRef}
             name="email"
@@ -97,7 +81,7 @@ function RegisterPage() {
             variant="outlined"
           />
           <Button onClick={onSumbit} variant="contained">
-            Register
+            Login
           </Button>
           {error && <Typography sx={{ color: "red" }}>{error}</Typography>}
         </Box>
@@ -106,4 +90,4 @@ function RegisterPage() {
   );
 }
 
-export default RegisterPage;
+export default LoginPage;
