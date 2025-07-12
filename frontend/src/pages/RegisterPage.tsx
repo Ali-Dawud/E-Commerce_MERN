@@ -2,7 +2,7 @@ import { Box, Button, TextField } from "@mui/material";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { useRef, useState } from "react";
-
+import { useAuth } from "../context/Auth/AuthContext";
 
 function RegisterPage() {
   const [error, setError] = useState("");
@@ -12,26 +12,38 @@ function RegisterPage() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
+  const { login } = useAuth();
+
   const onSumbit = async () => {
     const firstName = firstNameRef.current?.value;
     const lastName = lastNameRef.current?.value;
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
 
+    if (!firstName || !lastName || !email || !password) {
+      setError("Check submitted data");
+      return;
+    }
 
     const response = await fetch("http://localhost:3001/user/register", {
       method: "POST",
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ firstName, lastName, email, password }),
     });
 
-    const data = await response.json()
-    console.log(data)
-
     if (!response.ok) {
-      setError("Unble to register user, please try different credientials!")
-      return
+      setError("Unble to register user, please try different credientials!");
+      return;
     }
+
+    const token = await response.json();
+    if (!token) {
+      setError("Incorrect token");
+      return;
+    }
+
+
+    login(email, token);
   };
   return (
     <Container>
@@ -85,7 +97,7 @@ function RegisterPage() {
           <Button onClick={onSumbit} variant="contained">
             Register
           </Button>
-          {error  && <Typography sx={{color:'red'}}>{error}</Typography>}
+          {error && <Typography sx={{ color: "red" }}>{error}</Typography>}
         </Box>
       </Box>
     </Container>
