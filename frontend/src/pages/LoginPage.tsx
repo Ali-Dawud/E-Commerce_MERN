@@ -39,50 +39,20 @@ function LoginPage() {
       return;
     }
 
-
     login(email, token);
     navigate("/")
   };
   return (
     <Container>
-      <Box
-        display={"flex"}
-        flexDirection={"column"}
-        justifyContent={"center"}
-        alignItems={"center"}
-        mt={4}
-      >
-        <Typography variant="h4" color="initial">
-          Login to Your Account
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            mt: 2,
-            border: 1,
-            borderColor: "#f5f5f5",
-            p: 2,
-          }}
-        >
-          <TextField
-            inputRef={emailRef}
-            name="email"
-            type="email"
-            label="Email"
-            variant="outlined"
-          />
-          <TextField
-            inputRef={passwordRef}
-            name="password"
-            type="password"
-            label="Password"
-            variant="outlined"
-          />
-          <Button onClick={onSumbit} variant="contained">
-            Login
-          </Button>
+      <Box display={"flex"} flexDirection={"column"} justifyContent={"center"} alignItems={"center"} mt={4}>
+        <Typography variant="h4" color="initial"> Login to Your Account</Typography>
+
+        <Box sx={{display: "flex",flexDirection: "column", gap: 2,mt: 2,border: 1,borderColor: "#f5f5f5",p: 2,}}>
+
+          <TextField inputRef={emailRef} name="email" type="email" label="Email" variant="outlined"/>
+          <TextField inputRef={passwordRef} name="password" type="password" label="Password" variant="outlined"/>
+          
+          <Button onClick={onSumbit} variant="contained">Login</Button>
           {error && <Typography sx={{ color: "red" }}>{error}</Typography>}
         </Box>
       </Box>
