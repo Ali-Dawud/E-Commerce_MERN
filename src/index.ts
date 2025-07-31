@@ -4,6 +4,7 @@ import userRoute from "./routes/userRoute";
 import { seedInitialProducts } from "./service/productService";
 import productModel from "./models/productModel";
 import productRoute from "./routes/productRoute";
+import cartRoute from "./routes/cartRoute";
 
 const app = express();
 const port = 3001;
@@ -23,6 +24,7 @@ seedInitialProducts()
 
 app.use("/user", userRoute);
 app.use("/products", productRoute);
+app.use("/cart", cartRoute);
 
 app.listen(port, () => {
   console.log(`Server is running at: http://localhost:${port}`);
