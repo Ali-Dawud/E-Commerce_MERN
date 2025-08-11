@@ -11,10 +11,13 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import { useAuth } from "../context/Auth/AuthContext";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function NavBar() {
+  const {username, token} =useAuth()
+
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
@@ -27,6 +30,7 @@ function NavBar() {
     setAnchorElUser(null);
   };
 
+  console.log(username, token)
   return (
     <AppBar position="static">
       <Container maxWidth="xl">

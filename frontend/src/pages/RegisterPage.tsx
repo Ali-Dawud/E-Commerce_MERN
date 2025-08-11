@@ -3,6 +3,7 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { useRef, useState } from "react";
 import { BASE_URL } from "../constants/baseUrl";
+import { useAuth } from "../context/Auth/AuthContext";
 
 function RegisterPage() {
   const [error, setError] = useState("");
@@ -11,6 +12,8 @@ function RegisterPage() {
   const lastNameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+
+  const { login } = useAuth();
 
   const onSumbit = async () => {
     const firstName = firstNameRef.current?.value;
@@ -35,9 +38,13 @@ function RegisterPage() {
       return;
     }
 
-    const data = await response.json();
+    const token = await response.json();
+    if (!token) {
+      setError("Incorrect token");
+      return;
+    }
 
-    console.log(data)
+    login(email, token);
   };
 
   return (
