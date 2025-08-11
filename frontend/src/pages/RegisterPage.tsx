@@ -4,9 +4,11 @@ import Typography from "@mui/material/Typography";
 import { useRef, useState } from "react";
 import { BASE_URL } from "../constants/baseUrl";
 import { useAuth } from "../context/Auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const firstNameRef = useRef<HTMLInputElement>(null);
   const lastNameRef = useRef<HTMLInputElement>(null);
@@ -45,6 +47,7 @@ function RegisterPage() {
     }
 
     login(email, token);
+    navigate("/");
   };
 
   return (
