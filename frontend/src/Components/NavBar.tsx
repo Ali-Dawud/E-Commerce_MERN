@@ -12,11 +12,12 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useAuth } from "../context/Auth/AuthContext";
-import { Grid } from "@mui/material";
+import { Badge, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { ShoppingCart } from "@mui/icons-material";
 
 function NavBar() {
-  const { username, token, isAuthenticated, logout } = useAuth();
+  const { username, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -39,13 +40,16 @@ function NavBar() {
     navigate("/login");
   };
 
+  const handleCart = () => {
+    navigate("/cart");
+  }
+
   const handleLogout = () => {
     logout();
     navigate("/");
     handleCloseUserMenu();
   };
 
-  console.log(username, token);
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -98,6 +102,11 @@ function NavBar() {
                 gap: 2,
               }}
             >
+              <IconButton aria-label="cart">
+                <Badge badgeContent={1} color="secondary">
+                  <ShoppingCart sx={{ color: "white" }} onClick={handleCart} />
+                </Badge>
+              </IconButton>
               {isAuthenticated ? (
                 <>
                   <Tooltip title="Open settings">
