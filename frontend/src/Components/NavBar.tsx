@@ -16,7 +16,7 @@ import { Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function NavBar() {
-  const { username, token, isAuthenticated } = useAuth();
+  const { username, token, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -37,6 +37,12 @@ function NavBar() {
 
   const handleLogin = () => {
     navigate("/login");
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+    handleCloseUserMenu();
   };
 
   console.log(username, token);
@@ -84,7 +90,14 @@ function NavBar() {
               </Box>
             </Box>
 
-            <Box sx={{ flexGrow: 0 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 2,
+              }}
+            >
               {isAuthenticated ? (
                 <>
                   <Tooltip title="Open settings">
@@ -120,7 +133,7 @@ function NavBar() {
                       </Typography>
                     </MenuItem>
 
-                    <MenuItem onClick={handleCloseUserMenu}>
+                    <MenuItem onClick={handleLogout}>
                       <Typography sx={{ textAlign: "center" }}>
                         Logout
                       </Typography>
