@@ -4,7 +4,7 @@ import { Box, Button, ButtonGroup } from "@mui/material";
 import { useCart } from "../context/Cart/CartContext";
 
 function CartPage() {
-  const { cartItems, totalAmount, updateItemInCart, deleteItemInCart } = useCart();
+  const { cartItems, totalAmount, updateItemInCart, deleteItemInCart, clearCart } = useCart();
 
   const handleQuantity = (productId: string, quantity: number) => {
     if (quantity <= 0) {
@@ -17,10 +17,17 @@ function CartPage() {
     deleteItemInCart(productId);
   };
 
+  const handleDeleteCart = () => {
+    clearCart();
+  };
+
   return (
     <Container fixed sx={{ mt: 2 }}>
       <Box display="flex" flexDirection="row" justifyContent="space-between">
         <Typography>My Cart</Typography>
+        <Button onClick={() => handleDeleteCart()} color="error">
+          REMOVE Cart
+        </Button>
       </Box>
       <Box display="flex" flexDirection="column" gap={4}>
         {cartItems.map((item) => (
