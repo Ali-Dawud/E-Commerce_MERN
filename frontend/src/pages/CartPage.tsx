@@ -4,13 +4,17 @@ import { Box, Button, ButtonGroup } from "@mui/material";
 import { useCart } from "../context/Cart/CartContext";
 
 function CartPage() {
-  const { cartItems, totalAmount, updateItemInCart } = useCart();
+  const { cartItems, totalAmount, updateItemInCart, deleteItemInCart } = useCart();
 
   const handleQuantity = (productId: string, quantity: number) => {
     if (quantity <= 0) {
       return;
     }
     updateItemInCart(productId, quantity);
+  };
+
+  const handleDeleteItem = (productId: string) => {
+    deleteItemInCart(productId);
   };
 
   return (
@@ -40,7 +44,7 @@ function CartPage() {
                 <Typography>
                   {item.quantity} X {item.unitPrice} USD
                 </Typography>
-                <Button color="error">REMOVE ITEM</Button>
+                <Button onClick={() => handleDeleteItem(item.productId)} color="error">REMOVE ITEM</Button>
               </Box>
             </Box>
 
