@@ -29,7 +29,7 @@ function HomePage() {
     <Container sx={{ mt: 2 }}>
       <Grid container spacing={2}>
         {products.map((p) => (
-          <Grid size={{ xs: 12, md: 4 }}>
+          <Grid key={p._id} size={{ xs: 12, md: 4 }}>
             <ProductCard {...p} />
           </Grid>
         ))}

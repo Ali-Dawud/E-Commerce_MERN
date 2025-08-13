@@ -52,6 +52,15 @@ function NavBar() {
     handleCloseUserMenu();
   };
 
+  const handleMyOrders = () => {
+    navigate("/my-orders");
+    handleCloseUserMenu();
+  }
+
+  const handleHome = () => {
+    navigate("/")
+  }
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -90,7 +99,7 @@ function NavBar() {
                 Tech Hub
               </Typography>
               <Box sx={{ flexGrow: 1, display: { md: "flex" } }}>
-                <Button sx={{ my: 2, color: "white", display: "block" }}>
+                <Button onClick={handleHome} sx={{ my: 2, color: "white", display: "block" }}>
                   Home
                 </Button>
               </Box>
@@ -138,7 +147,7 @@ function NavBar() {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                   >
-                    <MenuItem onClick={handleCloseUserMenu}>
+                    <MenuItem onClick={handleMyOrders}>
                       <Typography sx={{ textAlign: "center" }}>
                         My Orders
                       </Typography>
