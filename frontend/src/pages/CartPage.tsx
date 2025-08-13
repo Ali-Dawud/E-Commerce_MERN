@@ -2,9 +2,11 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { Box, Button, ButtonGroup } from "@mui/material";
 import { useCart } from "../context/Cart/CartContext";
+import { useNavigate } from "react-router-dom";
 
 function CartPage() {
   const { cartItems, totalAmount, updateItemInCart, deleteItemInCart, clearCart } = useCart();
+  const navigate = useNavigate();
 
   const handleQuantity = (productId: string, quantity: number) => {
     if (quantity <= 0) {
@@ -21,8 +23,12 @@ function CartPage() {
     clearCart();
   };
 
+  const handleCheckout = () => {
+    navigate("/checkout")
+  }
+
    const renderCartItems = () => (
-    <Box display="flex" flexDirection="column" gap={4}>
+    <Box display="flex" flexDirection="column" gap={4}  marginTop={2}>
       {cartItems.map((item) => (
         <Box
           key={item.productId}
@@ -58,15 +64,15 @@ function CartPage() {
         <Typography variant="h4">
           Total Amount: {totalAmount.toFixed(2)} USD
         </Typography>
-        <Button variant="contained">Go To Checkout</Button>
+        <Button variant="contained" onClick={handleCheckout}>Go To Checkout</Button>
       </Box>
     </Box>
    )
 
   return (
     <Container fixed sx={{ mt: 2 }}>
-      <Box display="flex" flexDirection="row" justifyContent="space-between">
-        <Typography>My Cart</Typography>
+      <Box display="flex" flexDirection="row" justifyContent="space-between" sx={{mb:2}}>
+        <Typography variant="h4">My Cart</Typography>
         <Button onClick={() => handleDeleteCart()} color="error">
           REMOVE Cart
         </Button>
