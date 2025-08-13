@@ -15,9 +15,11 @@ import { useAuth } from "../context/Auth/AuthContext";
 import { Badge, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ShoppingCart } from "@mui/icons-material";
+import { useCart } from "../context/Cart/CartContext";
 
 function NavBar() {
   const { username, isAuthenticated, logout } = useAuth();
+  const { cartItems } = useCart()
   const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -75,7 +77,7 @@ function NavBar() {
                 variant="h6"
                 noWrap
                 component="a"
-                href="#app-bar-with-responsive-menu"
+                href="/"
                 sx={{
                   mr: 2,
                   display: { xs: "none", md: "flex" },
@@ -103,7 +105,7 @@ function NavBar() {
               }}
             >
               <IconButton aria-label="cart">
-                <Badge badgeContent={1} color="secondary">
+                <Badge badgeContent={cartItems.length} color="secondary">
                   <ShoppingCart sx={{ color: "white" }} onClick={handleCart} />
                 </Badge>
               </IconButton>
